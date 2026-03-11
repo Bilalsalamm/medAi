@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>medAi | Hospital Management & AI Diagnostics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 font-sans text-slate-900">
+
+    <div class="min-h-screen flex">
+        <aside class="w-64 bg-slate-900 text-white hidden lg:flex flex-col">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold flex items-center gap-2">
+                    <span class="text-blue-400"><i class="fas fa-microscope"></i></span> medAi
+                </h1>
+            </div>
+            <nav class="flex-1 px-4 space-y-2">
+                <a href="#" class="flex items-center gap-3 p-3 bg-blue-600 rounded-lg"><i class="fas fa-th-large w-5"></i> Dashboard</a>
+                <a href="#" class="flex items-center gap-3 p-3 hover:bg-slate-800 rounded-lg transition"><i class="fas fa-user-injured w-5"></i> Patients</a>
+                <a href="#" class="flex items-center gap-3 p-3 hover:bg-slate-800 rounded-lg transition"><i class="fas fa-brain w-5"></i> AI Diagnostics</a>
+                <a href="#" class="flex items-center gap-3 p-3 hover:bg-slate-800 rounded-lg transition"><i class="fas fa-calendar-check w-5"></i> Appointments</a>
+            </nav>
+            <div class="p-6 border-t border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center font-bold">BM</div>
+                    <div>
+                        <p class="text-sm font-medium">Dr. Bilal M.</p>
+                        <p class="text-xs text-slate-400">Chief Pathologist</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto">
+            <header class="bg-white border-b border-slate-200 p-6 flex justify-between items-center sticky top-0 z-10">
+                <h2 class="text-xl font-bold">Clinical Overview</h2>
+                <div class="flex gap-4">
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition">
+                        <i class="fas fa-plus mr-2"></i> New AI Scan
+                    </button>
+                </div>
+            </header>
+
+            <div class="p-8 space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="text-blue-500 mb-2"><i class="fas fa-procedures text-2xl"></i></div>
+                        <p class="text-slate-500 text-sm font-medium uppercase tracking-wider">Bed Occupancy</p>
+                        <h3 class="text-3xl font-bold">84%</h3>
+                        <p class="text-xs text-slate-400 mt-2">12 beds available</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="text-purple-500 mb-2"><i class="fas fa-vial text-2xl"></i></div>
+                        <p class="text-slate-500 text-sm font-medium uppercase tracking-wider">AI Scans Today</p>
+                        <h3 class="text-3xl font-bold">42</h3>
+                        <p class="text-xs text-green-500 mt-2"><i class="fas fa-arrow-up"></i> 12% from yesterday</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="text-orange-500 mb-2"><i class="fas fa-clock text-2xl"></i></div>
+                        <p class="text-slate-500 text-sm font-medium uppercase tracking-wider">Avg. Wait Time</p>
+                        <h3 class="text-3xl font-bold">18m</h3>
+                        <p class="text-xs text-slate-400 mt-2">Target: < 20m</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="text-emerald-500 mb-2"><i class="fas fa-check-circle text-2xl"></i></div>
+                        <p class="text-slate-500 text-sm font-medium uppercase tracking-wider">AI Accuracy</p>
+                        <h3 class="text-3xl font-bold">98.2%</h3>
+                        <p class="text-xs text-slate-400 mt-2">Model: LLaVA-Med v2</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                            <h3 class="font-bold text-lg text-slate-800">Recent AI Findings</h3>
+                            <a href="#" class="text-blue-600 text-sm font-semibold hover:underline">View All</a>
+                        </div>
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-tighter">
+                                <tr>
+                                    <th class="px-6 py-4 font-semibold">Patient</th>
+                                    <th class="px-6 py-4 font-semibold">Scan Type</th>
+                                    <th class="px-6 py-4 font-semibold">AI Prediction</th>
+                                    <th class="px-6 py-4 font-semibold">Confidence</th>
+                                    <th class="px-6 py-4 font-semibold">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-sm">
+                                <tr>
+                                    <td class="px-6 py-4 font-medium">Sarah Jenkins</td>
+                                    <td class="px-6 py-4">Chest X-Ray</td>
+                                    <td class="px-6 py-4 text-red-600 font-semibold">Pneumonia detected</td>
+                                    <td class="px-6 py-4">94.8%</td>
+                                    <td class="px-6 py-4"><span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">URGENT</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 font-medium">Michael Chen</td>
+                                    <td class="px-6 py-4">Brain MRI</td>
+                                    <td class="px-6 py-4 text-emerald-600 font-semibold">No abnormalities</td>
+                                    <td class="px-6 py-4">99.1%</td>
+                                    <td class="px-6 py-4"><span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold">CLEAR</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 font-medium">Arjun V.</td>
+                                    <td class="px-6 py-4">Skin Lesion</td>
+                                    <td class="px-6 py-4 text-amber-600 font-semibold">Atypical melanocytic</td>
+                                    <td class="px-6 py-4">82.3%</td>
+                                    <td class="px-6 py-4"><span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold">FOLLOW-UP</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                            <h3 class="font-bold mb-4">Department Load</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-xs font-bold mb-1 uppercase"><span>Emergency</span> <span>90%</span></div>
+                                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                                        <div class="bg-red-500 h-full w-[90%]"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs font-bold mb-1 uppercase"><span>Radiology</span> <span>65%</span></div>
+                                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                                        <div class="bg-blue-500 h-full w-[65%]"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs font-bold mb-1 uppercase"><span>Inpatient</span> <span>40%</span></div>
+                                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-500 h-full w-[40%]"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-indigo-600 p-6 rounded-2xl text-white shadow-lg">
+                            <h4 class="font-bold text-lg mb-2">New Diagnosis</h4>
+                            <p class="text-indigo-100 text-sm mb-4">Upload an image to process with the LLaVA-Med pipeline.</p>
+                            <div class="border-2 border-dashed border-indigo-400 rounded-xl p-4 text-center cursor-pointer hover:bg-indigo-500 transition">
+                                <i class="fas fa-cloud-upload-alt text-2xl mb-2"></i>
+                                <p class="text-xs font-medium">Drop MRI, X-Ray or CT scans</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
