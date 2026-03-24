@@ -22,14 +22,19 @@
                 <a href="#" class="flex items-center gap-3 p-3 hover:bg-slate-800 rounded-lg transition"><i class="fas fa-brain w-5"></i> AI Diagnostics</a>
                 <a href="#" class="flex items-center gap-3 p-3 hover:bg-slate-800 rounded-lg transition"><i class="fas fa-calendar-check w-5"></i> Appointments</a>
             </nav>
-            <div class="p-6 border-t border-slate-800">
+            <div class="p-6 border-t border-slate-800 flex flex-col gap-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center font-bold">BM</div>
+                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center font-bold">
+                        {{ user.username|slice:":2"|upper }}
+                    </div>
                     <div>
-                        <p class="text-sm font-medium">Dr. Bilal M.</p>
-                        <p class="text-xs text-slate-400">Chief Pathologist</p>
+                        <p class="text-sm font-medium">{{ user.username }}</p>
+                        <p class="text-xs text-slate-400">{{ user.email }}</p>
                     </div>
                 </div>
+                <a href="/logout/" class="mt-4 flex items-center gap-2 bg-blue-600 hover:bg-red-700 transition text-white px-4 py-2 rounded-lg font-medium justify-center">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             </div>
         </aside>
 

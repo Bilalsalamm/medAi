@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* --- CONSOLIDATED LAB ASSISTANT CSS --- */
+    :root {
+        --primary-teal: #46c4d3;
+        --dark-navy: #1e293b;
+        --bg-light: #f8fafc;
+        --text-gray: #64748b;
+        --border-color: #e2e8f0;
+    }
+
+    .portal-wrapper {
+        display: flex;
+        min-height: 85vh;
+        margin: 20px;
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+        font-family: 'Quicksand', sans-serif;
+    }
+
+    /* Left Side: Branding & Info */
+    .illustration-side {
+        flex: 0.8;
+        background: linear-gradient(135deg, var(--primary-teal) 0%, var(--dark-navy) 100%);
+        padding: 60px 40px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .logo {
+        font-size: 28px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .illustration-content h3 { font-size: 2.2rem; margin-bottom: 15px; line-height: 1.2; }
+    .illustration-content p { font-size: 1.1rem; opacity: 0.9; font-weight: 500; }
+
+    /* Right Side: Form & List */
+    .form-side {
+        flex: 1.2;
+        padding: 50px 70px;
+        overflow-y: auto;
+        background: #fff;
+    }
+
+    .form-header { margin-bottom: 40px; }
+    .form-header h2 { color: var(--dark-navy); font-weight: 700; font-size: 32px; }
+
+    /* Form Fields Styling */
+    .med-form .input-group { margin-bottom: 24px; }
+    .med-form label { 
+        display: block; 
+        font-weight: 700; 
+        color: var(--dark-navy); 
+        margin-bottom: 10px; 
+        font-size: 14px;
+    }
+
+    .input-wrapper { position: relative; }
+    
+    /* Target Django's auto-generated inputs */
+    .input-wrapper input, 
+    .input-wrapper select, 
+    .input-wrapper textarea {
+        width: 100%;
+        padding: 14px 15px 14px 45px;
+        border: 2px solid var(--bg-light);
+        border-radius: 12px;
+        background: var(--bg-light);
+        font-size: 15px;
+        transition: all 0.3s ease;
+        outline: none;
+    }
+
+    /* Remove padding for textareas/descriptions if no icon is needed */
+    .input-wrapper textarea { padding-left: 15px; min-height: 100px; }
+
+    .input-wrapper input:focus, .input-wrapper select:focus {
+        border-color: var(--primary-teal);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(70, 196, 211, 0.1);
+    }
+
+    .input-wrapper i {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-gray);
+    }
+
+    .btn-register {
+        width: 100%;
+        padding: 18px;
+        background: var(--primary-teal);
+        color: white;
+        border: none;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 16px;
+        cursor: pointer;
+        transition: transform 0.2s;
+        margin-top: 10px;
+    }
+
+    .btn-register:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+    /* Uploaded Reports Feed */
+    .divider {
+        margin: 50px 0 20px;
+        font-weight: 700;
+        color: var(--text-gray);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    .divider::after { content: ""; flex: 1; height: 1px; background: var(--border-color); }
+
+    .report-card {
+        background: white;
+        border: 1px solid var(--border-color);
+        padding: 16px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .report-info strong { display: block; color: var(--dark-navy); font-size: 16px; }
+    .report-info span { color: var(--text-gray); font-size: 13px; font-weight: 500; }
+    .badge-doctor { background: #ecfeff; color: #0891b2; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+
+    @media (max-width: 900px) {
+        .portal-wrapper { flex-direction: column; }
+        .illustration-side { display: none; }
+        .form-side { padding: 30px; }
+    }
+</style>
+
+<div class="portal-wrapper">
+    <div class="illustration-side">
+        <div class="logo">
+            <i class="fas fa-hand-holding-medical"></i> Med AI
+        </div>
+        <div class="illustration-content">
+            <h3>Precision Analysis <br>Starts Here.</h3>
+            <p>Your work as a Lab Assistant helps doctors make faster, life-saving decisions. Upload clearly and assign accurately.</p>
+        </div>
+        <div class="footer-note">
+            <small>© 2026 Med AI Systems</small>
+        </div>
+    </div>
+
+    <div class="form-side">
+        <div class="form-header">
+            <h2>Lab Assistant Portal</h2>
+            <p class="text-muted">Register patient data and upload diagnostic imagery.</p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="med-form">
+            {% csrf_token %}
+            
+            <div class="input-group">
+                <label>Patient Name</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user-injured"></i>
+                    {{ patient_form.name }}
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Date of Birth</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-calendar-alt"></i>
+                    {{ patient_form.dob }}
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Clinical Details</label>
+                <div class="input-wrapper">
+                    {{ patient_form.details }}
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>X-ray / Diagnostic Image</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-file-medical"></i>
+                    {{ report_form.xray_image }}
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Assign Specialized Doctor</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user-md"></i>
+                    {{ report_form.assigned_doctor }}
+                </div>
+            </div>
+
+            <button class="btn-register" type="submit">
+                <i class="fas fa-paper-plane me-2"></i> Confirm Upload & Assign
+            </button>
+        </form>
+
+        <div class="divider">Recently Processed</div>
+        
+        <div class="report-feed">
+            {% for report in reports %}
+                <div class="report-card">
+                    <div class="report-info">
+                        <strong>{{ report.patient.name }}</strong>
+                        <span>{{ report.created_at|date:"M d, H:i" }}</span>
+                    </div>
+                    <div class="badge-doctor">
+                        Dr. {{ report.assigned_doctor.username }}
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted text-center py-4">No recent uploads found.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

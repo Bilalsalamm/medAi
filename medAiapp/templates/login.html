@@ -2,101 +2,212 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <title>Med Ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+        }
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #341c94 0%, #b12971 100%);
+            background-color: #1b4481;
+            background-image: url('{% static "images/login.png" %}');
+            display: flex; 
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
+        }
+        .login-container {
+            display: flex;
+            width: 1000px;
+            max-width: 95%;
+            height: 700px;
+            background: rgb(160, 228, 179);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .illustration-side {
+            flex: 1.2;
+            background-color: #c0eec4;
+            background-image: url('{% static "images/login.png" %}');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            padding: 40px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 10px;
         }
-        .login-card {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(52,28,148,0.2);
-            padding: 40px 32px;
-            width: 350px;
-            max-width: 90vw;
+        .form-side {
+            flex: 1;
+            padding: 60px;
             display: flex;
             flex-direction: column;
+            justify-content: center;
+        }
+        h2 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #333;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #555;
+        }
+        .input-wrapper {
+            position: relative;
+            display: flex;
             align-items: center;
         }
-        .login-card h2 {
-            color: #341c94;
-            margin-bottom: 24px;
-            font-weight: 700;
-        }
-        .login-card label {
-            color: #b12971;
-            font-weight: 500;
-            margin-top: 12px;
-            margin-bottom: 4px;
-            align-self: flex-start;
-        }
-        .login-card input {
+        .input-wrapper input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            font-size: 16px;
-            transition: border-color 0.2s;
-        }
-        .login-card input:focus {
-            border-color: #341c94;
+            padding: 12px 15px;
+            border: 1.5px solid #ddd;
+            border-radius: 10px;
             outline: none;
+            font-size: 16px;
         }
-        .login-card button {
+        .input-wrapper i {
+            position: absolute;
+            right: 15px;
+            color: #aaa;
+            cursor: pointer;
+        }
+        .forgot-password {
+            display: block;
+            text-align: left;
+            color: #ff8a65;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 25px;
+        }
+        .btn-login {
             width: 100%;
-            padding: 12px;
-            background: linear-gradient(90deg, #341c94 0%, #b12971 100%);
-            color: #fff;
+            padding: 14px;
+            background-color: #4dd0e1;
+            color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 18px;
             font-weight: 700;
             cursor: pointer;
-            margin-top: 8px;
+            transition: background 0.3s;
+        }
+        .btn-login:hover {
+            background-color: #26c6da;
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: #aaa;
+            font-size: 14px;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #eee;
+        }
+        .divider:not(:empty)::before { margin-right: .5em; }
+        .divider:not(:empty)::after { margin-left: .5em; }
+        .sign-in-text {
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        .sign-in-text a {
+            color: #333;
+            font-weight: 700;
+        }
+        .social-btn {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            font-weight: 500;
             transition: background 0.2s;
         }
-        .login-card button:hover {
-            background: linear-gradient(90deg, #b12971 0%, #341c94 100%);
+        .social-btn:hover {
+            background-color: #f9f9f9;
         }
-        .login-card .fa-user-lock {
-            color: #b12971;
-            font-size: 32px;
-            margin-bottom: 16px;
+        .social-btn i {
+            font-size: 18px;
         }
-        .login-card .error {
-            color: #b12971;
-            margin-top: 12px;
-            font-weight: 500;
+        @media (max-width: 850px) {
+            .illustration-side { display: none; }
+            .login-container { width: 450px; }
         }
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <i class="fas fa-user-lock"></i>
-        <h2>Login to medAi</h2>
-        <form method="post">
-            {% csrf_token %}
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            <button type="submit">Login</button>
-        </form>
-        {% if error %}
-            <div class="error">{{ error }}</div>
-        {% endif %}
-            <div style="width:100%;margin-top:18px;display:flex;flex-direction:column;align-items:center;gap:8px;">
-                <a href="/forgot-password/" style="color:#341c94;text-decoration:none;font-weight:500;">Forgot Password?</a>
-                <a href="/register/" style="color:#b12971;text-decoration:none;font-weight:500;">Create New User</a>
+    <div class="login-container">
+        <div class="illustration-side">
+            <div class="logo">
+                <i class="fas fa-leaf"></i> Med Ai
             </div>
+        </div>
+        <div class="form-side">
+            <h2>Login</h2>
+            {% if error %}
+                <div style="color:#ff5252; text-align:center; margin-bottom:18px; font-weight:700;">{{ error }}</div>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    <label for="username">Username or Email</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="username" name="username" placeholder="Enter your username or email" required>
+                        <i class="far fa-envelope"></i>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        <i class="far fa-eye-slash"></i>
+                    </div>
+                </div>
+                <a href="/forgot-password/" class="forgot-password">Forgot Password?</a>
+                <button class="btn-login" type="submit">Log In</button>
+            </form>
+            <div class="divider">Or</div>
+            <p class="sign-in-text">Don't have an account? <a href="/register/">Register</a></p>
+            <button class="social-btn">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+            <button class="social-btn">
+                <i class="fab fa-apple"></i> Continue with Apple
+            </button>
+            <button class="social-btn">
+                <i class="fab fa-facebook"></i> Continue with Facebook
+            </button>
+        </div>
     </div>
 </body>
 </html>
