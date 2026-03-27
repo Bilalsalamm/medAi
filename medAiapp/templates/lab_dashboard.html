@@ -3,13 +3,15 @@
 
 {% block content %}
 <style>
-    /* --- CONSOLIDATED LAB ASSISTANT CSS --- */
+    /* --- ENHANCED LAB ASSISTANT CSS --- */
     :root {
         --primary-teal: #46c4d3;
         --dark-navy: #1e293b;
         --bg-light: #f8fafc;
         --text-gray: #64748b;
         --border-color: #e2e8f0;
+        --danger-red: #e11d48;
+        --success-green: #10b981;
     }
 
     .portal-wrapper {
@@ -34,128 +36,171 @@
         justify-content: space-between;
     }
 
-    .logo {
-        font-size: 28px;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
+    .logo { font-size: 28px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
     .illustration-content h3 { font-size: 2.2rem; margin-bottom: 15px; line-height: 1.2; }
     .illustration-content p { font-size: 1.1rem; opacity: 0.9; font-weight: 500; }
 
     /* Right Side: Form & List */
     .form-side {
         flex: 1.2;
-        padding: 50px 70px;
+        padding: 40px 60px;
         overflow-y: auto;
         background: #fff;
     }
 
-    .form-header { margin-bottom: 40px; }
-    .form-header h2 { color: var(--dark-navy); font-weight: 700; font-size: 32px; }
-
-    /* Form Fields Styling */
-    .med-form .input-group { margin-bottom: 24px; }
-    .med-form label { 
-        display: block; 
-        font-weight: 700; 
-        color: var(--dark-navy); 
-        margin-bottom: 10px; 
-        font-size: 14px;
-    }
-
-    .input-wrapper { position: relative; }
-    
-    /* Target Django's auto-generated inputs */
-    .input-wrapper input, 
-    .input-wrapper select, 
-    .input-wrapper textarea {
-        width: 100%;
-        padding: 14px 15px 14px 45px;
-        border: 2px solid var(--bg-light);
-        border-radius: 12px;
-        background: var(--bg-light);
-        font-size: 15px;
-        transition: all 0.3s ease;
-        outline: none;
-    }
-
-    /* Remove padding for textareas/descriptions if no icon is needed */
-    .input-wrapper textarea { padding-left: 15px; min-height: 100px; }
-
-    .input-wrapper input:focus, .input-wrapper select:focus {
-        border-color: var(--primary-teal);
-        background: white;
-        box-shadow: 0 0 0 4px rgba(70, 196, 211, 0.1);
-    }
-
-    .input-wrapper i {
-        position: absolute;
-        left: 18px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--text-gray);
-    }
-
-    .btn-register {
-        width: 100%;
-        padding: 18px;
-        background: var(--primary-teal);
-        color: white;
-        border: none;
-        border-radius: 14px;
-        font-weight: 700;
-        font-size: 16px;
-        cursor: pointer;
-        transition: transform 0.2s;
-        margin-top: 10px;
-    }
-
-    .btn-register:hover { transform: translateY(-2px); filter: brightness(1.05); }
-
-    /* Uploaded Reports Feed */
-    .divider {
-        margin: 50px 0 20px;
-        font-weight: 700;
-        color: var(--text-gray);
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-    .divider::after { content: ""; flex: 1; height: 1px; background: var(--border-color); }
-
-    .report-card {
-        background: white;
-        border: 1px solid var(--border-color);
-        padding: 16px;
-        border-radius: 12px;
-        margin-bottom: 12px;
+    /* Top User Bar */
+    .user-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border-color);
     }
 
-    .report-info strong { display: block; color: var(--dark-navy); font-size: 16px; }
-    .report-info span { color: var(--text-gray); font-size: 13px; font-weight: 500; }
-    .badge-doctor { background: #ecfeff; color: #0891b2; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+    .user-info { font-size: 14px; color: var(--text-gray); font-weight: 600; }
+    .btn-logout {
+        background: #fff1f2 !important;
+        color: var(--danger-red) !important;
+        border: none;
+        padding: 8px 16px !important;
+        border-radius: 10px !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: auto !important;
+    }
 
-    @media (max-width: 900px) {
-        .portal-wrapper { flex-direction: column; }
-        .illustration-side { display: none; }
-        .form-side { padding: 30px; }
+    /* Messages & Errors */
+    .msg-alert { padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; list-style: none; }
+    .msg-error { background: #fee2e2; color: #b91c1c; }
+    .msg-success { background: #d1fae5; color: #065f46; }
+
+    /* Form Fields Styling */
+    .med-form .input-group { margin-bottom: 24px; }
+    .med-form label { display: block; font-weight: 700; color: var(--dark-navy); margin-bottom: 10px; font-size: 14px; }
+    .input-wrapper { position: relative; }
+    .input-wrapper input, .input-wrapper select, .input-wrapper textarea {
+        width: 100%; padding: 14px 15px 14px 45px; border: 2px solid var(--bg-light); border-radius: 12px;
+        background: var(--bg-light); font-size: 15px; transition: all 0.3s ease; outline: none;
+    }
+    .input-wrapper textarea { padding-left: 15px; min-height: 100px; }
+    .input-wrapper i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-gray); }
+
+    /* Modality Selector Styling */
+    .modality-selector {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 12px;
+        margin-bottom: 5px;
+    }
+    .modality-option {
+        padding: 16px;
+        border: 2px solid var(--bg-light);
+        border-radius: 12px;
+        background: var(--bg-light);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        text-align: center;
+        position: relative;
+    }
+    .modality-option i {
+        font-size: 28px;
+        color: var(--primary-teal);
+        position: static;
+        transform: none;
+    }
+    .modality-option .modality-name {
+        font-weight: 700;
+        color: var(--dark-navy);
+        font-size: 13px;
+    }
+    .modality-option .modality-desc {
+        font-size: 11px;
+        color: var(--text-gray);
+    }
+    .modality-option:hover {
+        border-color: var(--primary-teal);
+        background: #e0f7f6;
+        transform: translateY(-3px);
+    }
+    .modality-option.selected {
+        border-color: var(--primary-teal);
+        background: var(--primary-teal);
+        color: #fff;
+        animation: popEffect 0.4s ease;
+    }
+    .modality-option.selected i {
+        color: #fff;
+        animation: iconBounce 0.4s ease;
+    }
+    .modality-option.selected .modality-name {
+        color: #fff;
+    }
+    .modality-option.selected .modality-desc {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    /* Hide the default select field but keep it for form submission */
+    .input-group select {
+        display: none;
+    }
+
+    @keyframes popEffect {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+    @keyframes iconBounce {
+        0% { transform: scale(1) rotate(0deg); }
+        50% { transform: scale(1.2) rotate(10deg); }
+        100% { transform: scale(1) rotate(0deg); }
+    }
+
+    /* Tables */
+    .med-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+    .med-table th { padding: 10px; text-align: left; color: var(--text-gray); font-size: 12px; text-transform: uppercase; }
+    .med-table td { padding: 15px; background: var(--bg-light); color: var(--dark-navy); font-size: 14px; }
+    .med-table tr td:first-child { border-radius: 12px 0 0 12px; font-weight: 700; }
+    .med-table tr td:last-child { border-radius: 0 12px 12px 0; }
+
+    .details-blob { background: #e0f2f1; color: #00796b; padding: 4px 10px; border-radius: 8px; font-size: 12px; }
+
+    @media (max-width: 900px) { .portal-wrapper { flex-direction: column; } .illustration-side { display: none; } }
+    @media (max-width: 600px) { 
+        .modality-selector {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .modality-option {
+            padding: 12px;
+        }
+        .modality-option i {
+            font-size: 24px;
+        }
+        .modality-option .modality-name {
+            font-size: 12px;
+        }
+        .modality-option .modality-desc {
+            font-size: 10px;
+        }
     }
 </style>
 
 <div class="portal-wrapper">
     <div class="illustration-side">
         <div class="logo">
-            <i class="fas fa-hand-holding-medical"></i> Med AI
+            <i class="fas fa-microscope"></i> Med AI
         </div>
         <div class="illustration-content">
             <h3>Precision Analysis <br>Starts Here.</h3>
-            <p>Your work as a Lab Assistant helps doctors make faster, life-saving decisions. Upload clearly and assign accurately.</p>
+            <p>Your work as a Lab Assistant helps doctors make faster, life-saving decisions.</p>
         </div>
         <div class="footer-note">
             <small>© 2026 Med AI Systems</small>
@@ -163,75 +208,185 @@
     </div>
 
     <div class="form-side">
-        <div class="form-header">
-            <h2>Lab Assistant Portal</h2>
-            <p class="text-muted">Register patient data and upload diagnostic imagery.</p>
+        <div class="user-header">
+            <div class="user-info">
+                <i class="fas fa-id-badge me-1"></i> {{ user.username }} 
+                <span style="color: #cbd5e1; margin: 0 8px;">|</span>
+                <span class="text-muted" style="font-size: 12px;">Lab Assistant</span>
+                {% if user.userprofile.role == 'doctor' %}
+                <span style="margin-left: 20px;"><a href="{% url 'doctor_patients' %}" style="color:#46c4d3; font-weight:700;">My Patients</a></span>
+                {% endif %}
+            </div>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </form>
         </div>
 
-        <form method="post" enctype="multipart/form-data" class="med-form">
-            {% csrf_token %}
-            
-            <div class="input-group">
-                <label>Patient Name</label>
-                <div class="input-wrapper">
-                    <i class="fas fa-user-injured"></i>
-                    {{ patient_form.name }}
-                </div>
-            </div>
+        <div style="display: flex; gap: 15px; margin-bottom: 30px;">
+            <button id="tab-upload" class="btn-register" style="width: 160px; background: var(--primary-teal); padding: 12px;">Upload</button>
+            <button id="tab-patients" class="btn-register" style="width: 160px; background: var(--dark-navy); padding: 12px;">Patient Records</button>
+        </div>
 
-            <div class="input-group">
-                <label>Date of Birth</label>
-                <div class="input-wrapper">
-                    <i class="fas fa-calendar-alt"></i>
-                    {{ patient_form.dob }}
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label>Clinical Details</label>
-                <div class="input-wrapper">
-                    {{ patient_form.details }}
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label>X-ray / Diagnostic Image</label>
-                <div class="input-wrapper">
-                    <i class="fas fa-file-medical"></i>
-                    {{ report_form.xray_image }}
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label>Assign Specialized Doctor</label>
-                <div class="input-wrapper">
-                    <i class="fas fa-user-md"></i>
-                    {{ report_form.assigned_doctor }}
-                </div>
-            </div>
-
-            <button class="btn-register" type="submit">
-                <i class="fas fa-paper-plane me-2"></i> Confirm Upload & Assign
-            </button>
-        </form>
-
-        <div class="divider">Recently Processed</div>
-        
-        <div class="report-feed">
-            {% for report in reports %}
-                <div class="report-card">
-                    <div class="report-info">
-                        <strong>{{ report.patient.name }}</strong>
-                        <span>{{ report.created_at|date:"M d, H:i" }}</span>
-                    </div>
-                    <div class="badge-doctor">
-                        Dr. {{ report.assigned_doctor.username }}
-                    </div>
-                </div>
-            {% empty %}
-                <p class="text-muted text-center py-4">No recent uploads found.</p>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="msg-alert msg-success">{{ message }}</div>
             {% endfor %}
+        {% endif %}
+
+        {% if patient_form.errors or report_form.errors %}
+            <div class="msg-alert msg-error">
+                <strong>Error saving data:</strong>
+                {{ patient_form.errors }}{{ report_form.errors }}
+            </div>
+        {% endif %}
+
+        <div id="upload-section">
+            <div class="form-header">
+                <h2>New Report Upload</h2>
+                <p class="text-muted">Register patient and assign to a specialist.</p>
+            </div>
+            <form method="post" enctype="multipart/form-data" class="med-form">
+                {% csrf_token %}
+                {# Hide the patient dropdown from ReportForm, always create new patient #}
+                <input type="hidden" name="patient" value="">
+                <div class="input-group">
+                    <label>Patient Full Name</label>
+                    <div class="input-wrapper"><i class="fas fa-user"></i>{{ patient_form.name }}</div>
+                </div>
+                <div class="input-group">
+                    <label>Date of Birth</label>
+                    <div class="input-wrapper"><i class="fas fa-calendar"></i>{{ patient_form.dob }}</div>
+                </div>
+                <div class="input-group">
+                    <label>Clinical History</label>
+                    <div class="input-wrapper">{{ patient_form.details }}</div>
+                </div>
+                <div class="input-group">
+                    <label>X-ray / MRI Image</label>
+                    <div class="input-wrapper"><i class="fas fa-file-medical"></i>{{ report_form.xray_image }}</div>
+                </div>
+                <div class="input-group">
+                    <label>Imaging Modality</label>
+                    <div class="modality-selector">
+                        <div class="modality-option" data-value="XRay">
+                            <i class="fas fa-lungs"></i>
+                            <span class="modality-name">Chest X-Ray</span>
+                            <span class="modality-desc">Chest imaging</span>
+                        </div>
+                        <div class="modality-option" data-value="MRI">
+                            <i class="fas fa-brain"></i>
+                            <span class="modality-name">Brain MRI</span>
+                            <span class="modality-desc">Brain scan</span>
+                        </div>
+                        <div class="modality-option" data-value="Fracture">
+                            <i class="fas fa-bone"></i>
+                            <span class="modality-name">Bone Fracture</span>
+                            <span class="modality-desc">Fracture detection</span>
+                        </div>
+                        <div class="modality-option" data-value="Skin">
+                            <i class="fas fa-user"></i>
+                            <span class="modality-name">Skin Lesion</span>
+                            <span class="modality-desc">Skin analysis</span>
+                        </div>
+                    </div>
+                    {{ report_form.modality }}
+                </div>
+                <div class="input-group">
+                    <label>Clinical Notes</label>
+                    <div class="input-wrapper">{{ report_form.description }}</div>
+                </div>
+                <div class="input-group">
+                    <label>Assign to Doctor</label>
+                    <div class="input-wrapper"><i class="fas fa-user-md"></i>{{ report_form.assigned_doctor }}</div>
+                </div>
+                <button class="btn-register" type="submit" style="background: var(--primary-teal);">Confirm Upload & Assign</button>
+            </form>
+        </div>
+
+        <div id="patients-section" style="display:none;">
+            <div class="form-header">
+                <h2>Total Patients ({{ patients.count }})</h2>
+                <p class="text-muted">History of all collected patient data and their reports.</p>
+            </div>
+            <table class="med-table">
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>DOB</th>
+                        <th>Details</th>
+                        <th>Report Date</th>
+                        <th>Assigned Doctor</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for patient in patients %}
+                        {% for report in patient.reports.all %}
+                        <tr>
+                            <td>{{ patient.name }}</td>
+                            <td>{{ patient.dob|date:"Y-m-d" }}</td>
+                            <td><span class="details-blob">{{ patient.details|truncatechars:30 }}</span></td>
+                            <td>{{ report.created_at|date:"Y-m-d H:i" }}</td>
+                            <td>{% if report.assigned_doctor %}{{ report.assigned_doctor.get_full_name|default:report.assigned_doctor.username }}{% else %}-{% endif %}</td>
+                            <td>
+                                <a href="{% url 'patient_detail' patient.id %}" class="btn-logout" style="background: #46c4d3 !important; color: #fff !important; padding: 5px 12px !important; margin-right: 6px;">View</a>
+                                <a href="?edit_patient={{ patient.id }}#patients-section" class="btn-logout" style="background: #e0f2f1 !important; color: #00796b !important; padding: 5px 12px !important;">Edit</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6" style="text-align:center;">No reports found for this patient.</td></tr>
+                        {% endfor %}
+                    {% empty %}
+                    <tr><td colspan="6" style="text-align:center;">No records found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const uTab = document.getElementById('tab-upload');
+        const pTab = document.getElementById('tab-patients');
+        const uSec = document.getElementById('upload-section');
+        const pSec = document.getElementById('patients-section');
+
+        function switchTab(active) {
+            if(active === 'u') {
+                uSec.style.display = 'block'; pSec.style.display = 'none';
+                uTab.style.background = 'var(--primary-teal)'; pTab.style.background = 'var(--dark-navy)';
+            } else {
+                uSec.style.display = 'none'; pSec.style.display = 'block';
+                uTab.style.background = 'var(--dark-navy)'; pTab.style.background = 'var(--primary-teal)';
+            }
+        }
+        uTab.onclick = () => switchTab('u');
+        pTab.onclick = () => switchTab('p');
+        if(window.location.hash === '#patients-section') switchTab('p');
+
+        // Modality Selector Functionality
+        const modalityOptions = document.querySelectorAll('.modality-option');
+        const modalitySelect = document.querySelector('select[name="modality"]');
+        
+        // Set initial selected state based on form value
+        const initialValue = modalitySelect?.value || 'XRay';
+        document.querySelector(`.modality-option[data-value="${initialValue}"]`)?.classList.add('selected');
+        
+        modalityOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from all options
+                modalityOptions.forEach(opt => opt.classList.remove('selected'));
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                // Update the hidden select field value
+                if(modalitySelect) {
+                    modalitySelect.value = this.dataset.value;
+                }
+            });
+        });
+    });
+
+</script>
 {% endblock %}

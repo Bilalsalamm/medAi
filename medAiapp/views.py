@@ -7,10 +7,37 @@ def logout_view(request):
 
 def home(request):
     return render(request, 'homepage.html')
-
 def dashboard(request):
     user = request.user
-    return render(request, 'dashboard.html', {'user': user})
+    context = {'user': user}
+    
+    # Only run this logic for Doctors
+    if hasattr(user, 'userprofile') and user.userprofile.role == 'doctor':
+        from medAiapp.models import Report, Patient
+        
+        # 1. Get reports assigned to this doctor that HAVE a patient linked
+        # This prevents the 'blank' rows you saw in the screenshot
+        reports = Report.objects.filter(
+            assigned_doctor=user, 
+            patient__isnull=False 
+        ).select_related('patient').order_by('-created_at')
+
+        # 2. Group them by patient so one patient doesn't show up twice
+        patients_map = {}
+        for report in reports:
+            if report.patient_id not in patients_map:
+                patients_map[report.patient_id] = {
+                    'patient_obj': report.patient,  # Storing the actual Patient object
+                    'last_report': report
+                }
+        
+        # 3. Calculate metrics
+        context['assigned_patients'] = list(patients_map.values())
+        context['total_patients'] = len(patients_map)  # Unique patients
+        context['total_reports'] = reports.filter(ai_prediction_label__isnull=False).count()  # Analyzed reports
+        context['pending_reports'] = reports.filter(ai_prediction_label__isnull=True).count()  # Pending analysis
+
+    return render(request, 'dashboard.html', context)
 
 def login_view(request):
     error = None

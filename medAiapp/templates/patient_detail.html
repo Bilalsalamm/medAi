@@ -1,0 +1,589 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%);
+        min-height: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .patient-details-wrapper {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 30px 20px;
+    }
+
+    .header-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 30px;
+    }
+
+    .header-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #0891b2;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 10px 16px;
+        background: white;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-size: 14px;
+    }
+
+    .header-back:hover {
+        background: #ecfeff;
+        transform: translateX(-4px);
+    }
+
+    .header-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .header-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+        box-shadow: 0 4px 15px rgba(8, 145, 178, 0.2);
+    }
+
+    .header-text h1 {
+        font-size: 28px;
+        color: #0f172a;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .header-text p {
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .header-info-line {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        font-size: 12px;
+        color: #64748b;
+        margin-top: 12px;
+        flex-wrap: wrap;
+    }
+
+    .header-info-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .header-info-item i {
+        color: #0891b2;
+        font-size: 12px;
+    }
+
+    .header-info-value {
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+    .module-card {
+        background: white;
+        border-radius: 14px;
+        padding: 28px;
+        margin-bottom: 24px;
+        border-left: 4px solid #0891b2;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .module-card:hover {
+        box-shadow: 0 12px 24px rgba(8, 145, 178, 0.12);
+        transform: translateY(-2px);
+    }
+
+    .card-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #ecfeff;
+    }
+
+    .card-title i {
+        color: #0891b2;
+        font-size: 18px;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 16px;
+    }
+
+    .info-item {
+        background: #0e1318;
+        padding: 16px;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .info-label {
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+    }
+
+    .info-value {
+        color: #0f172a;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .modality-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 12px;
+    }
+
+    .modality-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+        border: 1px solid #a5f3fc;
+        border-radius: 8px;
+        color: #0891b2;
+        font-weight: 600;
+        font-size: 13px;
+        transition: all 0.3s ease;
+    }
+
+    .modality-badge:hover {
+        background: linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%);
+        border-color: #0891b2;
+    }
+
+    .clinical-text {
+        color: #475569;
+        line-height: 1.7;
+        font-size: 14px;
+        padding: 16px;
+        background: #f8fafc;
+        border-radius: 10px;
+        border-left: 3px solid #0891b2;
+    }
+
+    .reports-list {
+        list-style: none;
+    }
+
+    .report-item {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        border-left: 4px solid #06b6d4;
+    }
+
+    .report-item:hover {
+        background: #ecfeff;
+        border-left-color: #0891b2;
+        box-shadow: 0 4px 12px rgba(8, 145, 178, 0.1);
+    }
+
+    .report-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .report-date {
+        font-weight: 700;
+        color: #0891b2;
+        font-size: 13px;
+    }
+
+    .report-doctor {
+        color: #64748b;
+        font-size: 12px;
+    }
+
+    .report-description {
+        color: #475569;
+        font-size: 14px;
+        margin-bottom: 14px;
+        line-height: 1.6;
+    }
+
+    .report-image {
+        max-width: 100%;
+        max-height: 250px;
+        border-radius: 10px;
+        border: 2px solid #e2e8f0;
+        margin-bottom: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .report-image:hover {
+        border-color: #0891b2;
+        box-shadow: 0 4px 12px rgba(8, 145, 178, 0.15);
+    }
+
+    .ai-prediction {
+        background: linear-gradient(135deg, #ecfeff 0%, #f0f9ff 100%);
+        border: 2px solid #0891b2;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 16px;
+    }
+
+    .ai-prediction-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        color: #0891b2;
+        margin-bottom: 12px;
+        font-size: 14px;
+    }
+
+    .ai-prediction-header i {
+        font-size: 18px;
+    }
+
+    .ai-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .ai-item {
+        background: white;
+        padding: 12px;
+        border-radius: 8px;
+        border-left: 3px solid #0891b2;
+    }
+
+    .ai-item-label {
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+    }
+
+    .ai-item-value {
+        color: #0f172a;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .ai-report-text {
+        background: white;
+        border-radius: 8px;
+        padding: 14px;
+        color: #475569;
+        font-size: 13px;
+        line-height: 1.7;
+        border-left: 3px solid #06b6d4;
+    }
+
+    .ai-timestamp {
+        color: #64748b;
+        font-size: 11px;
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .processing-alert {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border: 2px solid #f59e0b;
+        border-radius: 12px;
+        padding: 16px;
+        margin-top: 16px;
+        color: #92400e;
+    }
+
+    .processing-alert-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .processing-alert-text {
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .processing-tip {
+        margin-top: 8px;
+        padding: 8px;
+        background: rgba(120, 53, 15, 0.1);
+        border-radius: 6px;
+        font-size: 12px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #64748b;
+    }
+
+    .empty-state i {
+        font-size: 48px;
+        color: #cbd5e1;
+        margin-bottom: 16px;
+        display: block;
+    }
+
+    .empty-state-text {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+        .header-section {
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .header-title {
+            width: 100%;
+        }
+
+        .header-text h1 {
+            font-size: 22px;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .report-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .module-card {
+            padding: 16px;
+        }
+    }
+</style>
+
+<div class="patient-details-wrapper">
+    <!-- Header Section -->
+    <div class="header-section">
+        {% if user.userprofile.role == 'lab_assistant' %}
+            <a href="{% url 'lab_dashboard' %}#patients-section" class="header-back">
+                <i class="fas fa-arrow-left"></i> Back to Records
+            </a>
+        {% elif user.userprofile.role == 'doctor' %}
+            <a href="{% url 'dashboard' %}" class="header-back">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        {% else %}
+            <a href="{% url 'home' %}" class="header-back">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        {% endif %}
+        
+        <div class="header-title">
+            <div class="header-icon">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="header-text">
+                <h1>{{ patient.name }}</h1>
+                <p>Patient Medical Record</p>
+                <div class="header-info-line">
+                    <div class="header-info-item">
+                        <i class="fas fa-birthday-cake"></i>
+                        <span><span class="header-info-value">DOB:</span> {{ patient.dob|date:"M d, Y" }}</span>
+                    </div>
+                    <div class="header-info-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span><span class="header-info-value">Registered:</span> {{ patient.created_at|date:"M d, Y" }}</span>
+                    </div>
+                    <div class="header-info-item">
+                        <i class="fas fa-file-medical"></i>
+                        <span><span class="header-info-value">Reports:</span> {{ patient.reports.count }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Imaging Modality Card -->
+    {% if patient.reports.all %}
+    <div class="module-card">
+        <div class="card-title">
+            <i class="fas fa-microscope"></i>
+            Imaging Modalities
+        </div>
+        <div class="modality-badges">
+            {% for report in patient.reports.all %}
+                {% if report.modality == 'XRay' %}
+                    <span class="modality-badge">
+                        <i class="fas fa-lungs"></i> X-Ray
+                    </span>
+                {% elif report.modality == 'MRI' %}
+                    <span class="modality-badge">
+                        <i class="fas fa-brain"></i> MRI
+                    </span>
+                {% elif report.modality == 'Fracture' %}
+                    <span class="modality-badge">
+                        <i class="fas fa-bone"></i> Fracture Analysis
+                    </span>
+                {% elif report.modality == 'Skin' %}
+                    <span class="modality-badge">
+                        <i class="fas fa-user"></i> Dermatology
+                    </span>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Clinical Overview Card -->
+    {% if patient.details %}
+    <div class="module-card">
+        <div class="card-title">
+            <i class="fas fa-stethoscope"></i>
+            Clinical Overview
+        </div>
+        <div class="clinical-text">
+            {{ patient.details }}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Medical Reports Card -->
+    <div class="module-card">
+        <div class="card-title">
+            <i class="fas fa-file-prescription"></i>
+            Medical Reports
+        </div>
+
+        {% if patient.reports.all %}
+            <ul class="reports-list">
+            {% for report in patient.reports.all %}
+                <li class="report-item">
+                    <div class="report-header">
+                        <div>
+                            <div class="report-date">
+                                <i class="fas fa-calendar-alt"></i> {{ report.created_at|date:"M d, Y - g:i A" }}
+                            </div>
+                        </div>
+                        <div class="report-doctor">
+                            <i class="fas fa-user-md"></i> Dr. {{ report.assigned_doctor.username }}
+                        </div>
+                    </div>
+
+                    {% if report.description %}
+                    <div class="report-description">
+                        {{ report.description }}
+                    </div>
+                    {% endif %}
+
+                    {% if report.xray_image %}
+                    <img src="{{ report.xray_image.url }}" alt="Medical Image" class="report-image" />
+                    {% endif %}
+
+                    <!-- AI Prediction Results -->
+                    {% if report.ai_prediction_label %}
+                    <div class="ai-prediction">
+                        <div class="ai-prediction-header">
+                            <i class="fas fa-microchip"></i>
+                            AI Analysis - {{ report.get_modality_display }}
+                        </div>
+                        
+                        <div class="ai-grid">
+                            <div class="ai-item">
+                                <div class="ai-item-label">Finding</div>
+                                <div class="ai-item-value">{{ report.ai_prediction_label }}</div>
+                            </div>
+                            <div class="ai-item">
+                                <div class="ai-item-label">Confidence Score</div>
+                                <div class="ai-item-value">{{ report.ai_confidence_score }}</div>
+                            </div>
+                        </div>
+
+                        {% if report.ai_report %}
+                        <div class="ai-report-text">
+                            <strong style="color: #0891b2; display: block; margin-bottom: 8px;">Clinical Report:</strong>
+                            {{ report.ai_report|linebreaks }}
+                        </div>
+                        {% endif %}
+
+                        <div class="ai-timestamp">
+                            <i class="fas fa-hourglass-end"></i>
+                            Generated: {{ report.ai_prediction_generated_at|date:"M d, Y - g:i A" }}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="processing-alert">
+                        <div class="processing-alert-title">
+                            <i class="fas fa-spinner"></i>
+                            AI Analysis In Progress
+                        </div>
+                        <div class="processing-alert-text">
+                            The multi-model AI engine is analyzing this {{ report.get_modality_display|lower }} image. Please refresh the page in a moment.
+                        </div>
+                        <div class="processing-tip">
+                            <strong>💡 Tip:</strong> If prediction takes longer than expected, the API server might be unavailable. Try refreshing again later.
+                        </div>
+                    </div>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <div class="empty-state-text">
+                    <strong>No reports found</strong><br>
+                    This patient hasn't been assigned any medical reports yet.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
