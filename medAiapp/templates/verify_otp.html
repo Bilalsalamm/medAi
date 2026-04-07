@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
-    <title>Forgot Password - Med Ai</title>
+    <title>Verify OTP - Med Ai</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -17,12 +17,12 @@
         body {
             background-color: #1b4481;
             /* background-image: url('{% static "images/login.png" %}'); */
-            display: flex;
+            display: flex; 
             justify-content: center;
             align-items: center;
             min-height: 100vh;
         }
-        .forgot-container {
+        .otp-container {
             display: flex;
             width: 1000px;
             max-width: 95%;
@@ -35,7 +35,7 @@
         .illustration-side {
             flex: 1.2;
             background-color: #c0eec4;
-            background-image: url('{% static "images/for.png" %}');
+            background-image: url('{% static "images/otp.png" %}');
             background-size: cover;
             background-position: center;
             position: relative;
@@ -58,16 +58,9 @@
         }
         h2 {
             font-size: 32px;
-            margin-bottom: 10px;
+            margin-bottom: 30px;
             text-align: center;
             color: #333;
-            font-weight: 700;
-        }
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 25px;
-            font-size: 14px;
         }
         .input-group {
             margin-bottom: 20px;
@@ -92,13 +85,30 @@
             font-size: 16px;
         }
         .input-wrapper input:focus {
-            border-color: #4dd0e1;
+            border-color: #26c6da;
         }
         .input-wrapper i {
             position: absolute;
             right: 15px;
             color: #aaa;
             cursor: pointer;
+            pointer-events: none;
+        }
+        .error {
+            color: #ff5252;
+            text-align: center;
+            margin-bottom: 18px;
+            font-weight: 700;
+        }
+        .info-box {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #1565c0;
+            font-size: 14px;
+            text-align: center;
         }
         .btn-submit {
             width: 100%;
@@ -111,88 +121,68 @@
             font-weight: 700;
             cursor: pointer;
             transition: background 0.3s;
+            margin-top: 10px;
         }
         .btn-submit:hover {
             background-color: #26c6da;
         }
-        .message {
-            color: #2e7d32;
-            background-color: #e8f5e9;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 12px;
-            font-weight: 500;
-            border-left: 4px solid #2e7d32;
+        .timer {
             text-align: center;
+            color: #666;
+            font-size: 13px;
+            margin-top: 15px;
         }
-        .error {
-            color: #c62828;
-            background-color: #ffebee;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 12px;
-            font-weight: 500;
-            border-left: 4px solid #c62828;
+        .resend-link {
             text-align: center;
+            margin-top: 15px;
+        }
+        .resend-link a {
+            color: #ff8a65;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .resend-link a:hover {
+            text-decoration: underline;
+        }
+        .email-display {
+            text-align: center;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: #f0f0f0;
+            border-radius: 10px;
         }
         .btn-home {
+            width: fit-content;
             display: inline-block;
-            margin-bottom: 15px;
-            padding: 10px 15px;
-            background-color: #4dd0e1;
+            padding: 10px 10px;
+            background-color: #39cadd;
             color: white;
             text-decoration: none;
             border-radius: 20px;
             font-weight: 700;
             cursor: pointer;
             transition: background 0.3s;
-            width: fit-content;
+            margin-bottom: 20px;
+            font-size: 14px;
         }
         .btn-home:hover {
             background-color: #26c6da;
         }
-        .info-box {
-            background-color: #e0f7f6;
-            color: #00897b;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #00897b;
-            font-size: 13px;
-        }
-        .divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 20px 0;
-            color: #aaa;
-            font-size: 14px;
-        }
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #eee;
-        }
-        .divider:not(:empty)::before { margin-right: .5em; }
-        .divider:not(:empty)::after { margin-left: .5em; }
-        .sign-in-text {
-            text-align: center;
-            font-size: 14px;
-        }
-        .sign-in-text a {
-            color: #333;
-            font-weight: 700;
-            text-decoration: none;
+        .btn-home i {
+            margin-right: 5px;
         }
         @media (max-width: 850px) {
             .illustration-side { display: none; }
-            .forgot-container { width: 450px; height: auto; }
+            .otp-container { width: 450px; height: auto; }
             .form-side { padding: 40px; }
         }
     </style>
 </head>
 <body>
-    <div class="forgot-container">
+    <div class="otp-container">
         <div class="illustration-side">
             <div class="logo">
                 <i class="fas fa-leaf"></i> Med Ai
@@ -200,43 +190,76 @@
         </div>
         <div class="form-side">
             <a href="/" class="btn-home"><i class="fas fa-home"></i> Home</a>
+            <h2>Verify OTP</h2>
             
-            <h2>Forgot Password</h2>
-            <p class="subtitle">Enter your email to receive OTP</p>
-            
-            <div class="info-box">
-                <i class="fas fa-lock"></i> We'll send a 6-digit code to your registered email address.
+            <div class="email-display">
+                <i class="fas fa-envelope"></i> {{ email }}
             </div>
             
             {% if error %}
-                <div class="error">
-                    <i class="fas fa-exclamation-circle"></i> {{ error }}
-                </div>
+                <div class="error">{{ error }}</div>
             {% endif %}
+            
+            <div class="info-box">
+                <i class="fas fa-info-circle"></i> A 6-digit OTP has been sent to your email. It will expire in 10 minutes.
+            </div>
             
             <form method="post">
                 {% csrf_token %}
                 <div class="input-group">
-                    <label for="email">Email Address</label>
+                    <label for="otp">OTP Code</label>
                     <div class="input-wrapper">
-                        <input type="email" id="email" name="email" placeholder="Enter your registered email" required>
-                        <i class="far fa-envelope"></i>
+                        <input 
+                            type="text" 
+                            id="otp" 
+                            name="otp" 
+                            placeholder="000000" 
+                            required
+                            maxlength="6"
+                            pattern="[0-9]{6}"
+                            inputmode="numeric"
+                        >
+                        <i class="fas fa-lock"></i>
                     </div>
                 </div>
-                <button class="btn-submit" type="submit">
-                    <i class="fas fa-envelope"></i> Send OTP
+                
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-check"></i> Verify OTP
                 </button>
             </form>
             
-            {% if message %}
-                <div class="message">
-                    <i class="fas fa-check-circle"></i> {{ message }}
-                </div>
-            {% endif %}
+            <div class="timer">
+                <i class="fas fa-hourglass-end"></i> OTP expires in 10 minutes
+            </div>
             
-            <div class="divider">Or</div>
-            <p class="sign-in-text">Remember your password? <a href="/login/">Back to Login</a></p>
+            <div class="resend-link">
+                <a href="/forgot-password/"><i class="fas fa-redo"></i> Request New OTP</a>
+            </div>
         </div>
     </div>
+    
+    <script>
+        // Only allow numbers in OTP input and auto-submit when 6 digits entered
+        document.getElementById('otp').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            if (this.value.length === 6) {
+                // Auto-submit if 6 digits entered
+                this.form.submit();
+            }
+        });
+    </script>
+</body>
+</html>
+    
+    <script>
+        // Only allow numbers in OTP input
+        document.getElementById('otp').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            if (this.value.length === 6) {
+                // Auto-submit if 6 digits entered
+                this.form.submit();
+            }
+        });
+    </script>
 </body>
 </html>

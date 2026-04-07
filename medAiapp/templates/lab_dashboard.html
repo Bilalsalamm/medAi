@@ -3,15 +3,15 @@
 
 {% block content %}
 <style>
-    /* --- ENHANCED LAB ASSISTANT CSS --- */
+    /* --- CONSOLIDATED LAB PORTAL CSS --- */
     :root {
+        --primary: #2563eb;
+        --primary-light: #3b82f6;
         --primary-teal: #46c4d3;
         --dark-navy: #1e293b;
         --bg-light: #f8fafc;
         --text-gray: #64748b;
         --border-color: #e2e8f0;
-        --danger-red: #e11d48;
-        --success-green: #10b981;
     }
 
     .portal-wrapper {
@@ -25,7 +25,7 @@
         font-family: 'Quicksand', sans-serif;
     }
 
-    /* Left Side: Branding & Info */
+    /* Left Sidebar */
     .illustration-side {
         flex: 0.8;
         background: linear-gradient(135deg, var(--primary-teal) 0%, var(--dark-navy) 100%);
@@ -37,10 +37,8 @@
     }
 
     .logo { font-size: 28px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
-    .illustration-content h3 { font-size: 2.2rem; margin-bottom: 15px; line-height: 1.2; }
-    .illustration-content p { font-size: 1.1rem; opacity: 0.9; font-weight: 500; }
 
-    /* Right Side: Form & List */
+    /* Main Form Side */
     .form-side {
         flex: 1.2;
         padding: 40px 60px;
@@ -48,7 +46,6 @@
         background: #fff;
     }
 
-    /* Top User Bar */
     .user-header {
         display: flex;
         justify-content: space-between;
@@ -58,46 +55,89 @@
         border-bottom: 1px solid var(--border-color);
     }
 
-    .user-info { font-size: 14px; color: var(--text-gray); font-weight: 600; }
+    /* New Logout Button - Blue with White Text, Red on Hover */
     .btn-logout {
-        background: #fff1f2 !important;
-        color: var(--danger-red) !important;
-        border: none;
-        padding: 8px 16px !important;
+        background: var(--primary-light) !important;
+        color: white !important;
+        padding: 10px 20px !important;
         border-radius: 10px !important;
-        font-size: 13px !important;
+        border: none !important;
         font-weight: 700 !important;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        width: auto !important;
+        font-size: 13px !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
     }
 
-    /* Messages & Errors */
-    .msg-alert { padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; list-style: none; }
-    .msg-error { background: #fee2e2; color: #b91c1c; }
-    .msg-success { background: #d1fae5; color: #065f46; }
-
-    /* Form Fields Styling */
-    .med-form .input-group { margin-bottom: 24px; }
-    .med-form label { display: block; font-weight: 700; color: var(--dark-navy); margin-bottom: 10px; font-size: 14px; }
-    .input-wrapper { position: relative; }
-    .input-wrapper input, .input-wrapper select, .input-wrapper textarea {
-        width: 100%; padding: 14px 15px 14px 45px; border: 2px solid var(--bg-light); border-radius: 12px;
-        background: var(--bg-light); font-size: 15px; transition: all 0.3s ease; outline: none;
+    .btn-logout:hover {
+        background: #ef4444 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3) !important;
     }
-    .input-wrapper textarea { padding-left: 15px; min-height: 100px; }
-    .input-wrapper i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-gray); }
 
-    /* Modality Selector Styling */
-    .modality-selector {
+    /* Tab Buttons with Hover Indicator */
+    .btn-register {
+        padding: 12px 24px !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+        font-size: 14px !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+    }
+
+    #tab-upload {
+        background: #e5e7eb !important;
+        color: var(--dark-navy) !important;
+        border: 2px solid #d1d5db !important;
+        box-shadow: none !important;
+    }
+
+    #tab-upload:hover {
+        background: #d1d5db !important;
+        transform: translateY(-2px) !important;
+    }
+
+    #tab-upload.active {
+        background: var(--primary-light) !important;
+        color: white !important;
+        border: 2px solid var(--primary-light) !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+    }
+
+    #tab-upload.active:hover {
+        box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4) !important;
+    }
+
+    #tab-patients {
+        background: #e5e7eb !important;
+        color: var(--dark-navy) !important;
+        border: 2px solid #d1d5db !important;
+    }
+
+    #tab-patients:hover {
+        background: #d1d5db !important;
+        transform: translateY(-2px) !important;
+    }
+
+    #tab-patients.active {
+        background: var(--primary-light) !important;
+        color: white !important;
+        border: 2px solid var(--primary-light) !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+    }
+
+    /* Modality & Doctor Card Selectors */
+    .modality-selector, .doctor-selector {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
         gap: 12px;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
     }
-    .modality-option {
+
+    .modality-option, .doctor-option {
         padding: 16px;
         border: 2px solid var(--bg-light);
         border-radius: 12px;
@@ -107,286 +147,436 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 8px;
         text-align: center;
-        position: relative;
+        gap: 8px;
     }
-    .modality-option i {
-        font-size: 28px;
+
+    .modality-option i, .doctor-option i {
+        font-size: 24px;
         color: var(--primary-teal);
-        position: static;
-        transform: none;
     }
-    .modality-option .modality-name {
-        font-weight: 700;
-        color: var(--dark-navy);
-        font-size: 13px;
-    }
-    .modality-option .modality-desc {
-        font-size: 11px;
-        color: var(--text-gray);
-    }
-    .modality-option:hover {
-        border-color: var(--primary-teal);
-        background: #e0f7f6;
-        transform: translateY(-3px);
-    }
-    .modality-option.selected {
-        border-color: var(--primary-teal);
+
+    .modality-option.selected, .doctor-option.selected {
         background: var(--primary-teal);
-        color: #fff;
-        animation: popEffect 0.4s ease;
+        border-color: var(--primary-teal);
+        color: white;
     }
-    .modality-option.selected i {
-        color: #fff;
-        animation: iconBounce 0.4s ease;
+
+    .modality-option.selected i, .doctor-option.selected i,
+    .modality-option.selected .modality-name, .doctor-option.selected .doc-name {
+        color: white !important;
     }
-    .modality-option.selected .modality-name {
-        color: #fff;
-    }
-    .modality-option.selected .modality-desc {
-        color: rgba(255, 255, 255, 0.8);
-    }
-    
-    /* Hide the default select field but keep it for form submission */
-    .input-group select {
+
+    /* Hide modality select, show doctor dropdown */
+    select[name="modality"] {
         display: none;
     }
 
-    @keyframes popEffect {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-        100% { transform: scale(1); }
-    }
-    @keyframes iconBounce {
-        0% { transform: scale(1) rotate(0deg); }
-        50% { transform: scale(1.2) rotate(10deg); }
-        100% { transform: scale(1) rotate(0deg); }
+    /* Doctor Dropdown Styling */
+    select[name="assigned_doctor"] {
+        display: block !important;
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid var(--bg-light);
+        border-radius: 12px;
+        background: var(--bg-light);
+        font-size: 14px;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.3s ease;
+        color: var(--dark-navy);
+        font-weight: 500;
     }
 
-    /* Tables */
-    .med-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
-    .med-table th { padding: 10px; text-align: left; color: var(--text-gray); font-size: 12px; text-transform: uppercase; }
-    .med-table td { padding: 15px; background: var(--bg-light); color: var(--dark-navy); font-size: 14px; }
-    .med-table tr td:first-child { border-radius: 12px 0 0 12px; font-weight: 700; }
-    .med-table tr td:last-child { border-radius: 0 12px 12px 0; }
+    select[name="assigned_doctor"]:focus {
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
 
-    .details-blob { background: #e0f2f1; color: #00796b; padding: 4px 10px; border-radius: 8px; font-size: 12px; }
+    select[name="assigned_doctor"] option {
+        padding: 10px;
+        background: white;
+        color: var(--dark-navy);
+    }
 
-    @media (max-width: 900px) { .portal-wrapper { flex-direction: column; } .illustration-side { display: none; } }
-    @media (max-width: 600px) { 
-        .modality-selector {
-            grid-template-columns: repeat(2, 1fr);
+    /* Patient Selection Dropdown Styling */
+    select[name="patient"] {
+        display: block !important;
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid var(--bg-light);
+        border-radius: 12px;
+        background: var(--bg-light);
+        font-size: 14px;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.3s ease;
+        color: var(--dark-navy);
+        font-weight: 500;
+    }
+
+    select[name="patient"]:focus {
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    select[name="patient"] option {
+        padding: 10px;
+        background: white;
+        color: var(--dark-navy);
+    }
+
+    /* New Patient Section Styling */
+    #new-patient-section {
+        transition: opacity 0.3s ease;
+    }
+
+    #new-patient-section.hidden {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    /* File Upload Input - New Theme */
+    input[type="file"] {
+        display: block !important;
+        width: 100%;
+        padding: 20px;
+        border: 2px dashed var(--primary);
+        border-radius: 12px;
+        background: linear-gradient(135deg, rgba(179, 181, 186, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+    }
+
+    input[type="file"]:hover {
+        border-color: var(--primary-light);
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    }
+
+    input[type="file"]::file-selector-button {
+        background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 700;
+        margin-right: 12px;
+        transition: all 0.3s ease;
+        font-size: 14px;
+    }
+
+    input[type="file"]::file-selector-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    /* Input Styling */
+    .med-form .input-group { margin-bottom: 24px; }
+    .med-form label { display: block; font-weight: 700; color: var(--dark-navy); margin-bottom: 8px; font-size: 14px; }
+    .input-wrapper input, .input-wrapper textarea {
+        width: 100%; padding: 12px 15px 12px 40px; border: 2px solid var(--bg-light); border-radius: 12px;
+        background: var(--bg-light); outline: none;
+        transition: all 0.3s ease;
+    }
+    .input-wrapper input:focus, .input-wrapper textarea:focus {
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .input-wrapper i { position: absolute; left: 15px; top: 18px; color: var(--text-gray); }
+
+    /* Patient Card Grid View */
+    .patients-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .patient-card {
+        background: var(--bg-light);
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .patient-card:hover {
+        border-color: var(--primary-light);
+        box-shadow: 0 8px 16px rgba(37, 99, 235, 0.15);
+        transform: translateY(-4px);
+    }
+
+    .patient-card-name {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--dark-navy);
+        margin-bottom: 12px;
+    }
+
+    .patient-card-info {
+        font-size: 13px;
+        color: var(--text-gray);
+        margin-bottom: 8px;
+    }
+
+    .patient-card-reports {
+        background: var(--primary-light);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        display: inline-block;
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+
+    .patient-card-btn {
+        background: var(--primary-light);
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 13px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .patient-card-btn:hover {
+        background: var(--primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    /* Messages Styling */
+    .messages {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 20px;
+    }
+
+    .messages li {
+        padding: 16px 20px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 14px;
+        animation: slideDown 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .messages .success {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+        border-left: 4px solid #10b981;
+        color: #047857;
+    }
+
+    .messages .error {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+        border-left: 4px solid #ef4444;
+        color: #dc2626;
+    }
+
+    .messages .success::before {
+        content: "✓";
+        font-size: 20px;
+        font-weight: 800;
+        color: #10b981;
+    }
+
+    .messages .error::before {
+        content: "✕";
+        font-size: 20px;
+        font-weight: 800;
+        color: #ef4444;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
         }
-        .modality-option {
-            padding: 12px;
-        }
-        .modality-option i {
-            font-size: 24px;
-        }
-        .modality-option .modality-name {
-            font-size: 12px;
-        }
-        .modality-option .modality-desc {
-            font-size: 10px;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
     }
+
 </style>
 
 <div class="portal-wrapper">
     <div class="illustration-side">
-        <div class="logo">
-            <i class="fas fa-microscope"></i> Med AI
-        </div>
+        <div class="logo"><i class="fas fa-microscope"></i> Med AI</div>
         <div class="illustration-content">
             <h3>Precision Analysis <br>Starts Here.</h3>
-            <p>Your work as a Lab Assistant helps doctors make faster, life-saving decisions.</p>
+            <p>Assign diagnostic imagery to specialists with one click.</p>
         </div>
-        <div class="footer-note">
-            <small>© 2026 Med AI Systems</small>
-        </div>
+        <div class="footer-note"><small>© 2026 Med AI Systems</small></div>
     </div>
 
     <div class="form-side">
         <div class="user-header">
-            <div class="user-info">
-                <i class="fas fa-id-badge me-1"></i> {{ user.username }} 
-                <span style="color: #cbd5e1; margin: 0 8px;">|</span>
-                <span class="text-muted" style="font-size: 12px;">Lab Assistant</span>
-                {% if user.userprofile.role == 'doctor' %}
-                <span style="margin-left: 20px;"><a href="{% url 'doctor_patients' %}" style="color:#46c4d3; font-weight:700;">My Patients</a></span>
-                {% endif %}
-            </div>
-            <form action="{% url 'logout' %}" method="post">
-                {% csrf_token %}
+            <div class="user-info"><i class="fas fa-id-badge me-2"></i><strong>{{ user.username }}</strong> | Lab Assistant</div>
+            <form action="{% url 'logout' %}" method="post">{% csrf_token %}
                 <button type="submit" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </form>
         </div>
 
         <div style="display: flex; gap: 15px; margin-bottom: 30px;">
-            <button id="tab-upload" class="btn-register" style="width: 160px; background: var(--primary-teal); padding: 12px;">Upload</button>
-            <button id="tab-patients" class="btn-register" style="width: 160px; background: var(--dark-navy); padding: 12px;">Patient Records</button>
+            <button id="tab-upload" class="btn-register active" style="width: 150px; padding: 10px; border-radius: 10px; cursor: pointer;">Upload</button>
+            <button id="tab-patients" class="btn-register" style="width: 150px; padding: 10px; border-radius: 10px; cursor: pointer;">Records</button>
         </div>
 
         {% if messages %}
-            {% for message in messages %}
-                <div class="msg-alert msg-success">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-
-        {% if patient_form.errors or report_form.errors %}
-            <div class="msg-alert msg-error">
-                <strong>Error saving data:</strong>
-                {{ patient_form.errors }}{{ report_form.errors }}
+            <div class="messages">
+                {% for message in messages %}
+                    <li class="{% if message.tags %}{{ message.tags }}{% else %}success{% endif %}">{{ message }}</li>
+                {% endfor %}
             </div>
         {% endif %}
 
         <div id="upload-section">
-            <div class="form-header">
-                <h2>New Report Upload</h2>
-                <p class="text-muted">Register patient and assign to a specialist.</p>
-            </div>
             <form method="post" enctype="multipart/form-data" class="med-form">
                 {% csrf_token %}
-                {# Hide the patient dropdown from ReportForm, always create new patient #}
-                <input type="hidden" name="patient" value="">
                 <div class="input-group">
-                    <label>Patient Full Name</label>
-                    <div class="input-wrapper"><i class="fas fa-user"></i>{{ patient_form.name }}</div>
+                    <label>Select Existing Patient or Create New</label>
+                    <div class="input-wrapper" style="position: relative;"><i class="fas fa-hospital-user"></i>{{ patient_selection_form.patient }}</div>
+                    <small style="color: var(--text-gray); margin-top: 5px; display: block;">Select a patient ID or leave blank to create new patient</small>
                 </div>
+
+                <div id="new-patient-section">
+                    <div class="input-group">
+                        <label>Patient Name</label>
+                        <div class="input-wrapper" inputmode="text" style="position: relative;"><i class="fas fa-user"></i>{{ patient_form.name }}</div>
+                    </div>
+
                 <div class="input-group">
                     <label>Date of Birth</label>
-                    <div class="input-wrapper"><i class="fas fa-calendar"></i>{{ patient_form.dob }}</div>
+                    <div class="input-wrapper" style="position: relative;"><i class="fas fa-calendar"></i>{{ patient_form.dob }}</div>
                 </div>
-                <div class="input-group">
-                    <label>Clinical History</label>
-                    <div class="input-wrapper">{{ patient_form.details }}</div>
                 </div>
-                <div class="input-group">
-                    <label>X-ray / MRI Image</label>
-                    <div class="input-wrapper"><i class="fas fa-file-medical"></i>{{ report_form.xray_image }}</div>
-                </div>
+
                 <div class="input-group">
                     <label>Imaging Modality</label>
                     <div class="modality-selector">
-                        <div class="modality-option" data-value="XRay">
-                            <i class="fas fa-lungs"></i>
-                            <span class="modality-name">Chest X-Ray</span>
-                            <span class="modality-desc">Chest imaging</span>
-                        </div>
-                        <div class="modality-option" data-value="MRI">
-                            <i class="fas fa-brain"></i>
-                            <span class="modality-name">Brain MRI</span>
-                            <span class="modality-desc">Brain scan</span>
-                        </div>
-                        <div class="modality-option" data-value="Fracture">
-                            <i class="fas fa-bone"></i>
-                            <span class="modality-name">Bone Fracture</span>
-                            <span class="modality-desc">Fracture detection</span>
-                        </div>
-                        <div class="modality-option" data-value="Skin">
+                        <div class="modality-option" data-value="XRay"><i class="fas fa-lungs"></i><span class="modality-name">Chest X-Ray</span></div>
+                        <div class="modality-option" data-value="MRI"><i class="fas fa-brain"></i><span class="modality-name">Brain MRI</span></div>
+                        <div class="modality-option" data-value="Fracture"><i class="fas fa-bone"></i><span class="modality-name">Fracture</span></div>
+                          <div class="modality-option" data-value="Skin">
                             <i class="fas fa-user"></i>
                             <span class="modality-name">Skin Lesion</span>
-                            <span class="modality-desc">Skin analysis</span>
+                          
                         </div>
                     </div>
                     {{ report_form.modality }}
                 </div>
-                <div class="input-group">
-                    <label>Clinical Notes</label>
-                    <div class="input-wrapper">{{ report_form.description }}</div>
-                </div>
+
                 <div class="input-group">
                     <label>Assign to Doctor</label>
-                    <div class="input-wrapper"><i class="fas fa-user-md"></i>{{ report_form.assigned_doctor }}</div>
+                    {{ report_form.assigned_doctor }}
                 </div>
-                <button class="btn-register" type="submit" style="background: var(--primary-teal);">Confirm Upload & Assign</button>
+
+                <div class="input-group">
+                    <label>Diagnostic Image</label>
+                    {{ report_form.xray_image }}
+                </div>
+
+                <button class="btn-register" type="submit" style="width: 100%; background: var(--primary-light); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(37, 99, 235, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(37, 99, 235, 0.3)'">Confirm & Assign</button>
             </form>
         </div>
 
         <div id="patients-section" style="display:none;">
-            <div class="form-header">
-                <h2>Total Patients ({{ patients.count }})</h2>
-                <p class="text-muted">History of all collected patient data and their reports.</p>
+            <div class="patients-grid">
+                {% for patient in patients %}
+                    {% if patient.reports.all|length > 0 %}
+                    <div class="patient-card">
+                        <div class="patient-card-name"><i class="fas fa-user-circle" style="margin-right: 8px; color: var(--primary-light);"></i>{{ patient.name }}</div>
+                        <div class="patient-card-info">
+                            {% if patient.dob %}
+                                <strong>DOB:</strong> {{ patient.dob|date:"M d, Y" }}
+                            {% else %}
+                                <em>No DOB</em>
+                            {% endif %}
+                        </div>
+                        <div class="patient-card-reports">
+                            <i class="fas fa-file-medical" style="margin-right: 6px;"></i>{{ patient.reports.all|length }} Report{% if patient.reports.all|length > 1 %}s{% endif %}
+                        </div>
+                        <a href="{% url 'patient_detail' patient.id %}" class="patient-card-btn">
+                            <i class="fas fa-eye" style="margin-right: 6px;"></i>View Details
+                        </a>
+                    </div>
+                    {% endif %}
+                {% endfor %}
             </div>
-            <table class="med-table">
-                <thead>
-                    <tr>
-                        <th>Patient Name</th>
-                        <th>DOB</th>
-                        <th>Details</th>
-                        <th>Report Date</th>
-                        <th>Assigned Doctor</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for patient in patients %}
-                        {% for report in patient.reports.all %}
-                        <tr>
-                            <td>{{ patient.name }}</td>
-                            <td>{{ patient.dob|date:"Y-m-d" }}</td>
-                            <td><span class="details-blob">{{ patient.details|truncatechars:30 }}</span></td>
-                            <td>{{ report.created_at|date:"Y-m-d H:i" }}</td>
-                            <td>{% if report.assigned_doctor %}{{ report.assigned_doctor.get_full_name|default:report.assigned_doctor.username }}{% else %}-{% endif %}</td>
-                            <td>
-                                <a href="{% url 'patient_detail' patient.id %}" class="btn-logout" style="background: #46c4d3 !important; color: #fff !important; padding: 5px 12px !important; margin-right: 6px;">View</a>
-                                <a href="?edit_patient={{ patient.id }}#patients-section" class="btn-logout" style="background: #e0f2f1 !important; color: #00796b !important; padding: 5px 12px !important;">Edit</a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr><td colspan="6" style="text-align:center;">No reports found for this patient.</td></tr>
-                        {% endfor %}
-                    {% empty %}
-                    <tr><td colspan="6" style="text-align:center;">No records found.</td></tr>
-                    {% endfor %}
-                </tbody>
-            </table>
         </div>
     </div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const uTab = document.getElementById('tab-upload');
-        const pTab = document.getElementById('tab-patients');
-        const uSec = document.getElementById('upload-section');
-        const pSec = document.getElementById('patients-section');
-
-        function switchTab(active) {
-            if(active === 'u') {
-                uSec.style.display = 'block'; pSec.style.display = 'none';
-                uTab.style.background = 'var(--primary-teal)'; pTab.style.background = 'var(--dark-navy)';
-            } else {
-                uSec.style.display = 'none'; pSec.style.display = 'block';
-                uTab.style.background = 'var(--dark-navy)'; pTab.style.background = 'var(--primary-teal)';
-            }
-        }
-        uTab.onclick = () => switchTab('u');
-        pTab.onclick = () => switchTab('p');
-        if(window.location.hash === '#patients-section') switchTab('p');
-
-        // Modality Selector Functionality
-        const modalityOptions = document.querySelectorAll('.modality-option');
-        const modalitySelect = document.querySelector('select[name="modality"]');
+        // Tab logic with active states
+        const uTab = document.getElementById('tab-upload'), pTab = document.getElementById('tab-patients');
+        const uSec = document.getElementById('upload-section'), pSec = document.getElementById('patients-section');
         
-        // Set initial selected state based on form value
-        const initialValue = modalitySelect?.value || 'XRay';
-        document.querySelector(`.modality-option[data-value="${initialValue}"]`)?.classList.add('selected');
+        uTab.onclick = () => { 
+            uSec.style.display = 'block'; 
+            pSec.style.display = 'none'; 
+            uTab.classList.add('active');
+            pTab.classList.remove('active');
+        };
         
-        modalityOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                // Remove selected class from all options
-                modalityOptions.forEach(opt => opt.classList.remove('selected'));
-                // Add selected class to clicked option
+        pTab.onclick = () => { 
+            uSec.style.display = 'none'; 
+            pSec.style.display = 'block';
+            pTab.classList.add('active');
+            uTab.classList.remove('active');
+        };
+
+        // Modality Card logic
+        const mOptions = document.querySelectorAll('.modality-option');
+        const mSelect = document.querySelector('select[name="modality"]');
+        mOptions.forEach(opt => {
+            opt.onclick = function() {
+                mOptions.forEach(o => o.classList.remove('selected'));
                 this.classList.add('selected');
-                // Update the hidden select field value
-                if(modalitySelect) {
-                    modalitySelect.value = this.dataset.value;
+                mSelect.value = this.dataset.value;
+            };
+        });
+
+        // Patient Selection Logic
+        const patientSelect = document.getElementById('patient-select');
+        const newPatientSection = document.getElementById('new-patient-section');
+        const nameInput = document.querySelector('input[name="name"]');
+        const dobInput = document.querySelector('input[name="dob"]');
+
+        if (patientSelect) {
+            patientSelect.addEventListener('change', function() {
+                if (this.value === '') {
+                    // Show new patient fields when "Create New" is selected
+                    newPatientSection.classList.remove('hidden');
+                    nameInput.required = true;
+                    dobInput.required = true;
+                } else {
+                    // Hide/disable new patient fields when existing patient is selected
+                    newPatientSection.classList.add('hidden');
+                    nameInput.required = false;
+                    dobInput.required = false;
                 }
             });
-        });
+        }
     });
-
 </script>
 {% endblock %}

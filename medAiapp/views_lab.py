@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .forms import PatientForm, ReportForm
+from .forms import PatientForm, ReportForm, PatientSelectionForm
 from .models import Report, Patient, UserProfile
 from django.contrib.auth.models import User
 from django.contrib import messages # Added for feedback
@@ -25,38 +25,61 @@ def lab_dashboard(request):
             patient_form = PatientForm(request.POST, instance=patient_to_edit)
             if patient_form.is_valid():
                 patient_form.save()
-                messages.success(request, "Patient details updated successfully.")
+                messages.success(request, "✓ Patient details updated successfully.", extra_tags='success')
                 return redirect('lab_dashboard')
 
         # --- CASE 2: UPLOADING A NEW REPORT ---
         else:
+            patient_selection_form = PatientSelectionForm(request.POST)
             patient_form = PatientForm(request.POST)
             report_form = ReportForm(request.POST, request.FILES)
 
             # We check if report_form is valid first. 
             # Since we 'excluded' patient in forms.py, it will now pass.
             if report_form.is_valid():
-                if patient_form.is_valid():
-                    # Save the new patient
-                    patient = patient_form.save()
-                    
-                    # Create the report object but don't save to DB yet
-                    report = report_form.save(commit=False)
-                    report.patient = patient
-                    report.uploaded_by = request.user
-                    report.save()
-                    
-                    messages.success(request, f"Report for {patient.name} uploaded successfully!")
-                    return redirect('lab_dashboard')
+                # Check if an existing patient was selected
+                selected_patient = None
+                if patient_selection_form.is_valid() and patient_selection_form.cleaned_data.get('patient'):
+                    selected_patient = patient_selection_form.cleaned_data['patient']
+                    patient = selected_patient
+                    action = "added to"
                 else:
-                    # If patient form is invalid, the page will re-render with errors
-                    messages.error(request, "Please correct the errors in the patient form.")
+                    # Create new patient if no selection
+                    if patient_form.is_valid():
+                        patient = patient_form.save()
+                        action = "for new patient"
+                    else:
+                        messages.error(request, "⚠ Please correct the errors in the patient form.", extra_tags='error')
+                        # Re-render form with errors
+                        patient_selection_form = PatientSelectionForm()
+                        report_form = ReportForm()
+                        patients = Patient.objects.all().order_by('-id')
+                        reports = Report.objects.filter(uploaded_by=request.user).order_by('-created_at')
+                        doctors = User.objects.filter(userprofile__role='doctor')
+                        return render(request, 'lab_dashboard.html', {
+                            'patient_form': patient_form,
+                            'patient_selection_form': patient_selection_form,
+                            'report_form': report_form,
+                            'reports': reports,
+                            'patients': patients,
+                            'doctors': doctors,
+                        })
+                
+                # Create the report object but don't save to DB yet
+                report = report_form.save(commit=False)
+                report.patient = patient
+                report.uploaded_by = request.user
+                report.save()
+                
+                messages.success(request, f"✓ Report {action} {patient.name} (ID: {patient.id}) uploaded successfully!", extra_tags='success')
+                return redirect('lab_dashboard')
             else:
-                messages.error(request, "Please correct the errors in the report form.")
+                messages.error(request, "⚠ Please correct the errors in the report form.", extra_tags='error')
 
     else:
         # GET Request: Initial empty forms
         patient_form = PatientForm(instance=patient_edit) if patient_edit else PatientForm()
+        patient_selection_form = PatientSelectionForm()
         report_form = ReportForm()
 
     # Always fetch the latest data for the tabs
@@ -66,6 +89,7 @@ def lab_dashboard(request):
 
     return render(request, 'lab_dashboard.html', {
         'patient_form': patient_form,
+        'patient_selection_form': patient_selection_form,
         'report_form': report_form,
         'reports': reports,
         'patients': patients,
@@ -81,8 +105,8 @@ def patient_detail(request, patient_id):
     logger = logging.getLogger(__name__)
     patient = get_object_or_404(Patient, id=patient_id)
     
-    # Get all reports for this patient
-    reports = patient.reports.all()
+    # Get all reports for this patient, sorted by newest first
+    reports = patient.reports.all().order_by('-created_at')
     
     # Generate AI predictions on-demand for reports without predictions
     # But don't block page render if API is slow
@@ -109,7 +133,10 @@ def patient_detail(request, patient_id):
                 # Don't crash - just skip the prediction
                 continue
     
-    return render(request, 'patient_detail.html', {'patient': patient})
+    return render(request, 'patient_detail.html', {
+        'patient': patient,
+        'reports': reports
+    })
 
 @login_required
 def doctor_patients(request):

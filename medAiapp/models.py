@@ -1,8 +1,10 @@
 from django.db import models
-
-
-
 from django.contrib.auth.models import User
+from django.utils import timezone
+from datetime import timedelta
+import uuid
+
+
 class UserProfile(models.Model):
 	ROLE_CHOICES = [
 		('lab_assistant', 'Lab Assistant'),
@@ -11,9 +13,14 @@ class UserProfile(models.Model):
 	]
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+	approved = models.BooleanField(default=False)  # Approval status
 
 	def __str__(self):
-		return f"{self.user.username} ({self.role})"
+		status = "✓ Approved" if self.approved else "⏳ Pending"
+		return f"{self.user.username} ({self.role}) - {status}"
+
+	class Meta:
+		ordering = ('user__date_joined',)
 
 class Patient(models.Model):
 	name = models.CharField(max_length=150)
@@ -48,12 +55,58 @@ class Report(models.Model):
 	def __str__(self):
 		return f"Report for {self.patient.name} ({self.created_at.date()})"
 
+# models.py
 class PendingUser(models.Model):
-	username = models.CharField(max_length=150, unique=True)
-	email = models.EmailField(unique=True)
-	password = models.CharField(max_length=128)
-	created_at = models.DateTimeField(auto_now_add=True)
-	approved = models.BooleanField(default=False)
+    ROLE_CHOICES = [
+        ('lab_assistant', 'Lab Assistant'),
+        ('doctor', 'Doctor'),
+    ]
+    username = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)
+    
+    # ADD THIS: Captures the requested role
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='doctor') 
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    approved = models.BooleanField(default=False)
+    rejection_reason = models.TextField(blank=True, null=True)  # Optional rejection reason
 
-	def __str__(self):
-		return self.username
+    def __str__(self):
+        return f"{self.username} ({self.role})"
+
+class PasswordResetToken(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='password_reset_token')
+    token = models.CharField(max_length=100, unique=True, default=uuid.uuid4)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    @property
+    def is_expired(self):
+        # Token expires after 24 hours
+        return timezone.now() - self.created_at > timedelta(hours=24)
+    
+    def __str__(self):
+        return f"Reset token for {self.user.username}"
+
+class PasswordResetOTP(models.Model):
+    email = models.EmailField()
+    otp = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    verified = models.BooleanField(default=False)
+    attempts = models.IntegerField(default=0)
+    
+    @property
+    def is_expired(self):
+        # OTP expires after 10 minutes
+        return timezone.now() - self.created_at > timedelta(minutes=10)
+    
+    @property
+    def is_valid(self):
+        # Valid if not expired, not verified, and attempts < 5
+        return not self.is_expired and not self.verified and self.attempts < 5
+    
+    def __str__(self):
+        return f"OTP for {self.email}"
+    
+    class Meta:
+        ordering = ['-created_at']

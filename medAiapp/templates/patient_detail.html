@@ -215,10 +215,36 @@
         border-left: 4px solid #06b6d4;
     }
 
+    .report-item.latest {
+        background: linear-gradient(135deg, #ecfeff 0%, #f0f9ff 100%);
+        border: 2px solid #0891b2;
+        box-shadow: 0 8px 20px rgba(8, 145, 178, 0.15);
+        position: relative;
+    }
+
+    .report-item.latest::before {
+        content: "NEW";
+        position: absolute;
+        top: -12px;
+        left: 20px;
+        background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
     .report-item:hover {
         background: #ecfeff;
         border-left-color: #0891b2;
         box-shadow: 0 4px 12px rgba(8, 145, 178, 0.1);
+    }
+
+    .report-item.latest:hover {
+        box-shadow: 0 12px 24px rgba(8, 145, 178, 0.2);
+        transform: translateY(-2px);
     }
 
     .report-header {
@@ -452,14 +478,14 @@
     </div>
 
     <!-- Imaging Modality Card -->
-    {% if patient.reports.all %}
+    {% if reports %}
     <div class="module-card">
         <div class="card-title">
             <i class="fas fa-microscope"></i>
             Imaging Modalities
         </div>
         <div class="modality-badges">
-            {% for report in patient.reports.all %}
+            {% for report in reports %}
                 {% if report.modality == 'XRay' %}
                     <span class="modality-badge">
                         <i class="fas fa-lungs"></i> X-Ray
@@ -502,10 +528,10 @@
             Medical Reports
         </div>
 
-        {% if patient.reports.all %}
+        {% if reports %}
             <ul class="reports-list">
-            {% for report in patient.reports.all %}
-                <li class="report-item">
+            {% for report in reports %}
+                <li class="report-item {% if forloop.first %}latest{% endif %}">
                     <div class="report-header">
                         <div>
                             <div class="report-date">
